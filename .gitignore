@@ -1,0 +1,20 @@
+# Build output — everything here is generated
+build/
+
+# macOS
+.DS_Store
+
+# Runtime databases and their journals
+*.db
+*.db-journal
+*-journal
+
+# bench_lock aggregation files
+*.results
+
+# Scratch notes, not part of the project
+further_results.txt
+
+# Design documents — kept locally, not published
+db_build_docs.md
+db_build_order_detailed.md
