@@ -1,29 +1,21 @@
 # DiminutiveDB
 
-This document uses ASD-STE100 Simplified Technical English.
-
 ## 1. Description
 
-DiminutiveDB is a small database. It is a library for programs in the C
-language. You put the library in your program. The database does not need a
-server. The database does not need other software.
+DiminutiveDB is an embedded database library.
 
-The database keeps all data in one file. The file contains tables. Each table
-has columns. Each column has a name and a type. You give the columns when you
-make the table. You cannot change the columns later.
+The database keeps all data in one file. The file contains tables, each of which must
+have a fixed schema; you cannot edit the columns after they are made.
 
 The database has no query language. Your program calls C functions to read data
-and to write data.
+and to write data via the API.
 
 ## 2. Functions
 
-- The database keeps all data in one file.
-- The database writes a journal file before it changes a page. The journal
-  keeps the data safe if the program stops.
+- The database keeps all data in one file, and uses a rollback journal to be crash-safe.
 - Each table has one B-tree index. The key of the index is the first column.
-- Only one program can write at one time. Many programs can read at one time.
+- The database allows single write, multiple read access.
 - The library uses only the C standard library and the operating system.
-- The database examines a checksum each time it reads a page.
 
 ## 3. Limits
 
@@ -39,7 +31,7 @@ and to write data.
 
 ## 4. Build the library
 
-Do this command in the top directory:
+Run this command in the top directory:
 
 ```bash
 make
@@ -49,15 +41,13 @@ The command makes the library `build/libkhabibdb.a`.
 
 ## 5. Do the tests
 
-Do this command to build the tests and to run them:
+Run this command to build the tests and to run them:
 
 ```bash
 make test
 ```
 
-There are 100 tests. All tests must pass.
-
-Do this command to test the recovery of the database:
+Run this command to test the recovery of the database:
 
 ```bash
 make crash
@@ -119,25 +109,22 @@ khb_begin(db, 0);
 khb_commit(db);
 ```
 
-A speed test measured 51 rows each second with one transaction for each row. The
-same test measured 35195 rows each second with one transaction for 10000 rows.
-
 ## 8. Examine a database file
 
-Do this command to build the test tool:
+Run this command to build the test tool:
 
 ```bash
 make tools
 ```
 
-Then do this command:
+Then run this command:
 
 ```bash
 build/khbcheck <file>
 ```
 
 The tool examines the checksum of each page. It examines the list of free
-pages. It examines the index of each table. The tool gives a report. The tool
+pages. It examines the index of each table. The tool
 gives a status of 1 if it finds a problem.
 
 ## 9. Directories
