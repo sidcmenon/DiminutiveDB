@@ -119,8 +119,8 @@ khb_begin(db, 0);
 khb_commit(db);
 ```
 
-A speed test measured 51 rows each second with one transaction for each row. The
-same test measured 35195 rows each second with one transaction for 10000 rows.
+A speed test measured 50 rows each second with one transaction for each row. The
+same test measured 123571 rows each second with one transaction for 10000 rows.
 
 ## 8. Examine a database file
 

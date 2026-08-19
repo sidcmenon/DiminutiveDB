@@ -12,6 +12,28 @@ static void test_crc_vector(void)
     CHECK_EQ(khb_crc32("123456789", 9), 0xCBF43926u);
 }
 
+static void test_crc_impl_agreement(void)
+{
+    uint8_t buf[KHB_PAGE_SIZE];
+    size_t  n;
+    int     i;
+
+    for (i = 0; i < KHB_PAGE_SIZE; i++)
+        buf[i] = (uint8_t)((i * 37 + 11) & 0xFF);
+
+    for (n = 0; n <= 64; n++)
+        CHECK_EQ(khb_crc32(buf, n), khb_crc32_table(buf, n));
+
+    for (n = 0; n < 500; n++) {
+        size_t len = (size_t)((n * 7919) % (KHB_PAGE_SIZE - 3));
+        CHECK_EQ(khb_crc32(buf, len), khb_crc32_table(buf, len));
+    }
+
+    CHECK_EQ(khb_crc32(buf, KHB_PAGE_SIZE - 4), khb_crc32_table(buf, KHB_PAGE_SIZE - 4));
+    CHECK_EQ(khb_crc32(buf, KHB_PAGE_SIZE), khb_crc32_table(buf, KHB_PAGE_SIZE));
+    CHECK_EQ(khb_crc32_table("123456789", 9), 0xCBF43926u);
+}
+
 static void test_struct_sizes(void)
 {
     CHECK_EQ(sizeof(page_header_t), 12);
@@ -119,6 +141,7 @@ static void test_file_header(void)
 int main(void)
 {
     RUN_TEST(test_crc_vector);
+    RUN_TEST(test_crc_impl_agreement);
     RUN_TEST(test_struct_sizes);
     RUN_TEST(test_roundtrip);
     RUN_TEST(test_wrong_id);
